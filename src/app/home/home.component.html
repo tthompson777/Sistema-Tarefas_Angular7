@@ -1,0 +1,284 @@
+﻿<!-- main app container -->
+<div class="container" role="main">
+	<nav>
+		<!-- <a routerLink="/">Home</a> -->
+	</nav>
+	<router-outlet></router-outlet>
+
+	<div class="row">
+		<div class="col-sm-4 text-center">
+			<div class="cards header-green">
+				<i class="fa fa-check fa-5x"></i>
+				<hr>
+				<span class="font-1-5em"><strong>9</strong> Tarefas Concluídas</span>
+			</div>
+		</div>
+
+		<div class="col-sm-4 text-center">
+			<div class="cards header-purple">
+				<i class="fa fa-star fa-5x"></i>
+				<hr>
+				<span class="font-1-5em"><strong>53</strong> Novas Tarefas</span>
+			</div>
+		</div>
+
+		<div class="col-sm-4 text-center" (click)="openModalInsert()" data-toggle="modal"
+		data-target="#modalInsert">
+			<div class="cards header-blue">
+				<i class="fa fa-plus fa-5x"></i>
+				<hr>
+				<span class="font-1-5em">Adicionar Nova Tarefa</span>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="container-table">
+		<div class="row">
+			<div class="col-sm-12">
+				<h2><i class="fa fa-tasks"></i> Lista de Tarefas</h2>
+				<div class="max-height-500">
+					<div class="table-responsive">
+						<table class="table table-striped table-hover">
+							<thead>
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">Título</th>
+									<th scope="col">Descrição</th>
+									<th scope="col">Data de Criação</th>
+									<th scope="col">Data de Edição</th>
+									<th scope="col">Status</th>
+									<th scope="col"></th>
+									<th scope="col"></th>
+									<th scope="col"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let row of resultListTasks; let i = index">
+									<th scope="row">{{ row.id }}</th>
+									<td>{{ row.titulo }}</td>
+									<td>{{ row.desc }}</td>
+									<td>{{ row.criacao }}</td>
+									<td>{{ row.edicao }}</td>
+									<td>{{ row.status }}</td>
+
+									<!-- Alterar o status -->
+									<td>
+										<span>
+											<button [disabled]="row.status === 'Concluída' " class="btn btn-sm btn-success" type="button"
+												(click)="setOk(row)">
+												<i class="fa fa-check"></i>
+											</button>
+										</span>
+									</td>
+
+									<!-- Editar -->
+									<td>
+										<span>
+											<button *ngIf="row.status !== 'Concluída'" class="btn btn-sm btn-primary" type="button"
+												data-toggle="modal" data-target="#modalUpdate" (click)="openModalUpdate(row)">
+												<i class="fa fa-edit"></i>
+											</button>
+											<button *ngIf="row.status === 'Concluída'" class="btn btn-sm btn-primary" type="button"
+												data-toggle="modal" data-target="#modalUpdate" (click)="openModalUpdate(row)">
+												<i class="fa fa-eye"></i>
+											</button>
+										</span>
+									</td>
+
+									<!-- Excluir -->
+									<td>
+										<span>
+											<button [disabled]="row.status === 'Concluída' " class="btn btn-sm btn-danger" type="button"
+												(click)="openModalConfirm(row)" data-toggle="modal" data-target="#modalConfirm">
+												<i class="fa fa-trash"></i>
+											</button>
+										</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<hr>
+				<button type="button" class="btn btn-primary" (click)="openModalInsert()" data-toggle="modal"
+					data-target="#modalInsert">
+					<i class="fa fa-plus"></i>
+					<span> Adicionar Tarefa </span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal de confirmação -->
+<div class="modal fade" id="modalConfirm" tabindex="-1" aria-labelledby="modalConfirmLabel" aria-hidden="true">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header header-default">
+				<h5 class="modal-title" id="modalConfirmLabel">Excluir Tarefa</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<h5>A tarefa <strong [innerHtml]="titleDelete"></strong> será escluída. Deseja prosseguir?</h5>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" (click)="deleteTasks(row);" data-dismiss="modal">
+					<i class="fa fa-check"></i>
+					<span> Sim</span>
+				</button>
+
+				<button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-times"></i>
+					<span> Não</span>
+				</button>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!-- Modal Editar -->
+<div class="modal fade" id="modalUpdate" tabindex="-1" aria-labelledby="modalUpdateLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header header-default">
+				<h5 class="modal-title" id="modalUpdateLabel">Editar Tarefa</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form name="editForm">
+					<div class="row" *ngFor="let row of [getRowEdit]; let i = index">
+						<div class="col-sm-2">
+							<div class="form-group">
+								<label for="id">ID</label>
+								<input type="text" name="id" disabled [(ngModel)]="row.id" #id="ngModel" class="form-control">
+							</div>
+						</div>
+						<div class="col-sm-10">
+							<div class="form-group">
+								<label for="titulo">Título</label>
+								<input type="text" name="titulo" [disabled]="row.status === 'Concluída' " class="form-control"
+									[(ngModel)]="row.titulo">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label for="desc">Descrição</label>
+								<input type="text" name="desc" required [disabled]="row.status === 'Concluída' " class="form-control"
+									[(ngModel)]="row.desc">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="criacao">Data de Criação</label>
+								<input type="text" name="criacao" class="form-control" disabled [(ngModel)]="row.criacao">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="edicao">Data de Edição</label>
+								<input type="text" name="edicao" class="form-control" disabled [(ngModel)]="row.edicao">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="status">Status</label>
+								<input type="text" name="status" class="form-control" disabled [(ngModel)]="row.status">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" (click)="updateTask(getRowEdit);" data-dismiss="modal"
+					[disabled]="getRowEdit.status === 'Concluída' ">
+					<i class="fa fa-save"></i>
+					<span> Salvar</span>
+				</button>
+
+				<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-times"></i>
+					<span> Fechar</span>
+				</button>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!-- Modal Inserir -->
+<div class="modal fade" id="modalInsert" tabindex="-1" aria-labelledby="modalInsertLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header header-default">
+				<h5 class="modal-title" id="modalInsertLabel">Criar Nova Tarefa</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form name="editForm">
+					<div class="row">
+						<div class="col-sm-2">
+							<div class="form-group">
+								<label for="id">ID</label>
+								<input type="text" name="id" class="form-control" disabled>
+							</div>
+						</div>
+						<div class="col-sm-10">
+							<div class="form-group">
+								<label for="titulo">Título</label>
+								<input type="text" name="titulo" required class="form-control" [(ngModel)]="newTask.titulo">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label for="desc">Descrição</label>
+								<input type="text" name="desc" required class="form-control" [(ngModel)]="newTask.desc">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="criacao">Data de Criação</label>
+								<input type="text" name="criacao" class="form-control" disabled [(ngModel)]="newTask.criacao">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="edicao">Data de Edição</label>
+								<input type="text" name="edicao" class="form-control" disabled [(ngModel)]="newTask.edicao">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="status">Status</label>
+								<input type="text" name="status" value="New" class="form-control" disabled [(ngModel)]="newTask.status">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" (click)="insertTask(newTask);" data-dismiss="modal">
+					<i class="fa fa-save"></i>
+					<span> Salvar</span>
+				</button>
+
+				<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-times"></i>
+					<span> Fechar</span>
+				</button>
+			</div>
+
+		</div>
+	</div>
+</div>
