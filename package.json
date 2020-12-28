@@ -1,9 +1,9 @@
 {
-  "name": "angular-7-custom-modal",
+  "name": "sistema-tarefas-supero",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cornflourblue/angular-7-custom-modal.git"
+    "url": "https://github.com/tthompson777/sistema-tarefas-supero"
   },
   "scripts": {
     "build": "webpack --mode production",
