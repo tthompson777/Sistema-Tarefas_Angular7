@@ -13,4 +13,4 @@ npm start. Normalmente roda em http://localhost:8080/.
 * Fontes Google
 
 # Informações Gerais
-Neste sistema é possíve, 
+Neste sistema é possíve, Criar, Editar, Deletar e marcar como concluída uma tarefa.
