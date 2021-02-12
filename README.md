@@ -7,7 +7,7 @@ npm start. Normalmente roda em http://localhost:8080/.
 
 # Recursos utilizados
 * Angular 7
-* Para o CRUD, foi utilizado o MockApi (https://mockapi.io/projects/5fe1ea217a94870017681bf7). Desta forma é possível trabalhyar com dados e fazer GET, POST, PUT e DELETE, 
+* Para o CRUD, foi utilizado o MockApi (https://mockapi.io/projects/5fe1ea217a94870017681bf7). Desta forma é possível trabalhar com dados e fazer GET, POST, PUT e DELETE, 
 * Bootstrap, 
 * Font Awesome
 * Fontes Google
