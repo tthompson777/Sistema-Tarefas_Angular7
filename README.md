@@ -1,4 +1,4 @@
-# sistema-tarefas-supero
+# Sistema de Tarefas em Angular7
 Sistema criado para desafio na Supero - Concluído em 27/12/2020, ás 22:26.
 
 # Instalação
